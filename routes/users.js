@@ -6,12 +6,15 @@ const UserDetails = require('../models/user');
 
 const paramMiddleware = (page) => {
     return (req, res, next) => {
+
         const error = req.flash('error');
-        if (error.length) {
-            console.log(error);
+        const customError = req.flash('customError');
+        if (error.length || customError.length) {
+           
+            // return res.redirect('/auth/login_get');
             return res.render('auth/' + page, {
                 messages: error,
-                customError: '',
+                customError,
             });
         }
         next();
@@ -27,26 +30,21 @@ function IsNotAuthenticated(req, res, next) {
         next();
     }
 }
+
+
 router.get('/login', [paramMiddleware('login'), IsNotAuthenticated], (req, res) => {
 
-    return res.render('auth/login', {
-        messages: '',
-        customError: '',
-    });
+    return res.render('auth/login');
 });
 
 router.get('/register', [paramMiddleware('register'), IsNotAuthenticated], (req, res) => {
-    // return res.send('dsd');
-    return res.render('auth/register', {
-        customError: '',
-        messages: ''
-    });
+
+    return res.render('auth/register');
 });
 
 router.post('/login', async (req, res) => {
 
     const schema = Joi.object({
-        // name: Joi.string().min(6).required(),
         email: Joi.string().min(5).max(255).required().email(),
         password: Joi.string().min(6).max(255).required()
     });
@@ -59,20 +57,16 @@ router.post('/login', async (req, res) => {
 
     let user = await UserDetails.findOne({ email: req.body.email });
     if (!user) {
-        return res.render('auth/login', {
-            customError: 'user is not found!',
-            messages: ''
-        })
+        req.flash('customError', 'email is not found!')
+        return res.redirect('/auth/login');
     }
-    // res.status(400).send('Invalid email or password.');
+
 
     user.authenticateUser(req.body.password, user.password)
         .then(async (isValid) => {
             if (!isValid) {
-                return res.render('auth/login', {
-                    customError: 'Invalid email or password',
-                    messages: ''
-                })
+                req.flash('customError', 'Invalid email or password')
+                return res.redirect('/auth/login');
             }
             await req.login(user, function (err) {
                 if (err) { return next(err); }
@@ -80,9 +74,7 @@ router.post('/login', async (req, res) => {
             });
         })
         .catch(err => {
-            // console.log(err)
             return next(err);
-            //   logServerErrorAndRespond(err, `Authentication error`, res);
         });
 
 
@@ -98,33 +90,37 @@ router.post('/register', async (req, res) => {
         password: Joi.string().min(6).max(255).required(),
     });
 
-    const { error } = schema.validate(req.body);
+    const { error } = schema.validate(req.body,{ abortEarly: false });
 
     // const { error } = validate(req.body);
     if (error) {
         req.flash('error', error.details)
-        return res.redirect('/auth/register', {
-
-            customError: 'Invalid email or password',
-            messages: ''
-        });
+        return res.redirect('/auth/register');
     }
 
     let user = await UserDetails.findOne({ email: req.body.email });
-    if (user) return res.status(400).send('there is a user with same email.');
-
+    if (user){
+        req.flash('customError', 'there is a user with same email.')
+        return res.redirect('/auth/login');
+        // return res.status(400).send();
+    } 
+    
     user = new UserDetails({ email: req.body.email, name: req.body.name, password: req.body.password });
 
     UserDetails.register(_.pick(user, ['name', 'email', 'password']), req.body.password, function (err, user) {
-        // console.log(user);
+
         if (err) {
-            return res.send({ success: false, message: "Your account could not be saved. Error: " + err });
+            req.flash('customError', "Your account could not be saved. Error: " + err )
+        return res.redirect('/auth/register');
+            // return res.send({ success: false, message: "Your account could not be saved. Error: " + err });
         }
         else {
             return req.login(user, (er) => {
                 if (er) {
-                    console.log(er.message)
-                    return res.send({ success: false, message: err })
+
+                    req.flash('customError', "Your account could not be saved. Error: " + err )
+                    return res.redirect('/auth/register');
+                    // return res.send({ success: false, message: err })
                 }
                 else {
                     return res.redirect('/')
@@ -133,20 +129,14 @@ router.post('/register', async (req, res) => {
                 }
             });
         }
-        // user = new User()
-        // console.log(user);
-
-        // res.send(token);
+        
     });
 });
 
 router.delete('/logout', (req, res) => {
     req.logout(function (err) {
         if (err) { return next(err); }
-        console.log(req.session)
         req.session.destroy();
-        console.log(req.session)
-        console.log('lougout')
         res.redirect('/auth/login');
     });
 })

@@ -58,6 +58,8 @@ require('./startup/logging')();
 require('./startup/db')();
 require("./startup/routes")(app);
 
+
+
 app.use('/openai', require('./routes/openaiRoutes'));
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

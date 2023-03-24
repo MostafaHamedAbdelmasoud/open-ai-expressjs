@@ -36,7 +36,6 @@ async function generateImageRequest(prompt, size) {
     }
 
     const data = await response.json();
-    // console.log(data);
 
     const imageUrl = data.data;
     let imageContainer = document.querySelector('.image-container')
@@ -45,11 +44,11 @@ async function generateImageRequest(prompt, size) {
     if(imageUrl.length > 0){
       for (const image of imageUrl) {
         html = '<img src="'+image.url+'" alt="" id="image" />';
-        console.log(html);
+
         imageContainer.insertAdjacentHTML("afterend", html);
       }
     }
-      // console.log(imageUrl);
+
     // document.querySelector('#image').src = imageUrl;
 
     removeSpinner();

@@ -1,0 +1,13 @@
+<% if(locals.customError && locals.customError.length) { %>
+    <%- include('../../error/customError'); %>
+    <% } %>
+    <% if(locals.messages) { %>
+     <%# locals.messages %>
+    <% let keyOfMessage  %>
+    <% locals.messages.forEach(messageError => { %>
+        <%   keyOfMessage = messageError.path[0]%>
+        <% allErrorMessages[keyOfMessage] = messageError.message  %>
+        
+        <% });%>
+        <% Object.entries(allErrorMessages) %>
+<% } %>
