@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"  rel="stylesheet" />
+    <link rel="stylesheet" href="/css/login.css" />
+    
+    <!------ Include the above in your HEAD tag ---------->
+    <title>OpenAI Image Genrator</title>
+</head>
+
+<body>
+    
+    <div class="sidenav">
+        <div class="login-main-text">
+            <h2>Application<br> Login Page</h2>
+            <p>Login or register from here to access.</p>
+        </div>
+    </div>
+    
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div class="login-form">
+                <% let allErrorMessages = {} %>
+                <% if(customError !== 'undefiend'&&  customError != '') { %>
+                        <%= customError %>
+                    <% } %>
+                <% if(messages !== 'undefiend'&&  messages != '' && typeof messages == 'object') { %>
+                    <% let keyOfMessage  %>
+                    <% messages.forEach(messageError => { %>
+                        <%   keyOfMessage = messageError.path[0]%>
+                        <% allErrorMessages[keyOfMessage] = messageError.message  %>
+                        
+                        <% });%>
+                <% } %>
+
+                <form action="/auth/register" method="post">
+
+                    <div class="form-group my-2">
+                        
+                        <label> Email</label>
+                        <input  type="text" class="form-control" name="email" placeholder="Email">
+                        <%- include('../error/input', {key:'email',allErrorMessages}); %>
+                    </div>
+                    <div class="form-group my-2">
+                        <label> Name</label>
+                        <input  type="text" class="form-control" name="name" placeholder=" Name">
+                        <%- include('../error/input', {key:'name',allErrorMessages}); %>
+                    </div>
+                    <div class="form-group my-2 mb-3">
+                        <label>Password</label>
+                        <input type="password" class="form-control" name="password" placeholder="Password">
+                        <%- include('../error/input', {key:'password',allErrorMessages}); %>
+                    </div>
+                    <button type="submit" class="btn btn-black">Register</button>
+                    <a class="btn btn-secondary" href="auth/login">
+                   ds     Login
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/jquery-3.6.4.min.js"></script>
+    <%- include('../partials/footer') %>

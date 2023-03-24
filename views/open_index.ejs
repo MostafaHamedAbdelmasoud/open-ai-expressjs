@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="/css/spinner.css" />
+
+  <title>OpenAI Image Genrator</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg  navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand mx-auto" href="#">OPEN AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <form class="d-flex" action="/auth/logout?_method=delete" method="post">
+        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+        <button class="btn btn-outline-danger" type="submit">Logout</button>
+      </form>
+    </div>
+  </nav>
+
+  <main>
+    <section class="showcase">
+      <form id="image-form">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Prompt</label>
+          <input type="text" class="form-control" id="prompt" aria-describedby="emailHelp" required>
+          <div id="emailHelp" class="form-text">type any description here.</div>
+        </div>
+        <div class="mb-3">
+          <label for="disabledSelect" class="form-label">choose image size</label>
+          <select id="size" name="size" class="form-select">
+            <option value="small">Small</option>
+            <option value="medium" selected>Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-secondary">Submit</button>
+      </form>
+    </section>
+
+    <section class="image">
+      <div class="image-container" style="display: flex;">
+        <h2 class="msg"></h2>
+        <img src="" alt="" id="image" />
+      </div>
+    </section>
+  </main>
+
+  <div class="spinner"></div>
+
+  
+  <%- include('partials/footer') %>
