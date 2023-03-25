@@ -22,6 +22,6 @@ Run server
 npm start
 ```
 
-Visit `http://localhost:5000` in your browser.
+Visit `http://localhost:<port>` in your browser.
 
-The endpoint is at `POST http://localhost:5000/openai/generateimage`.
+The endpoint is at `POST http://localhost:<port>/openai/generateimage`.
