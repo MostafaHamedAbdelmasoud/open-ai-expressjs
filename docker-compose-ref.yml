@@ -1,0 +1,11 @@
+version: "3"
+services:
+  node-app:
+    container_name: express-demo-container-docker
+    build: .
+    volumes:
+      - ./src:/app/src:ro
+    ports:
+      - "3000:4000"
+    env_file:
+      - ./.env

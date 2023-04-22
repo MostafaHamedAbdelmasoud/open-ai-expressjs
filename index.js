@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv').config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -18,13 +18,23 @@ app.use(bodyParser.json());
 // app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+const userName = "root";
+const password = "example";
+const databasePort = "27017";
+const dbHost = "mongo";
+
+const dbStoreMongoDB = `mongodb://${userName}:${password}@${dbHost}:${databasePort}`;
 app.use(session({
     secret: process.env.SESSION_SECRET,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
     resave: false,
     saveUninitialized: false,
+
+
     store: new MongoStore({
-        mongoUrl: process.env.DB_URL
+        // mongoUrl: process.env.DB_URL
+        mongoUrl: dbStoreMongoDB
         , createAutoRemoveIdx: false,
         autoRemove: 'interval',
         autoRemoveInterval: 60 // In minutes. Default

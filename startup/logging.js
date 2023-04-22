@@ -14,9 +14,5 @@ winston.exceptions.handle(
   })
   
   winston.add(new winston.transports.File({ filename: 'logfile.log' }));
-  // winston.add(new winston.transports.MongoDB({
-  //   db: "mongodb://127.0.0.1/vidly",
-  //   level: 'info'
-  // }));
   
 }
