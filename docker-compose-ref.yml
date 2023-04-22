@@ -1,7 +1,7 @@
 version: "3"
 services:
-  node-app:
-    container_name: express-demo-container-docker
+  express-openai:
+    container_name: expres-openai-container
     build: .
     volumes:
       - ./src:/app/src:ro

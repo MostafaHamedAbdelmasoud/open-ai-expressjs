@@ -1,6 +1,6 @@
 version: "3"
 services:
-  node-app:
+  express-openai:
     build: 
       context: .
       target: development
