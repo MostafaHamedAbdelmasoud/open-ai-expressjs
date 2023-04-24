@@ -2,7 +2,7 @@ version: "3"
 services:
   express-openai:
     platform: linux/x86_64
-    # image: 2880932/express-nodeapi
+    image: 2880932/express-nodeapi
     container_name: expres-openai-container
     ports:
       - "4000:4000"
