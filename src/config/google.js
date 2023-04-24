@@ -2,16 +2,11 @@ const passport = require("passport");
 const User = require("../../models/user");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const UserService = require('../user')
-let callbackURL = '';
-if (process.env.APP_ENVIRONMENT === "development") {
-   callbackURL = "http://localhost:81/auth/google/callback";
-}else{
-   callbackURL = "http://54.208.184.10:80/auth/google/callback";
-}
+
 passport.use(
   new GoogleStrategy(
     {
-      callbackURL: callbackURL,
+      callbackURL: process.env.google_callback_url,
       clientID: process.env.google_client_id,
       clientSecret: process.env.google_client_secret,
     },
